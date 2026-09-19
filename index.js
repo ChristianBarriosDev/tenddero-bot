@@ -16,7 +16,13 @@ const bot = new TelegramBot(token, { polling: true });
 
 // Ruta web de verificación para el servidor
 app.get('/', (req, res) => {
-  res.send('¡Servidor de Tenddero operando al 100% y conectado con Supabase!');
+    res.send('Servidor de Tenddero operando al 100% y conectado con Supabase!');
+});
+
+// Usar el puerto que asigna Railway o el 8080 por defecto localmente
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo exitosamente en el puerto ${PORT}`);
 });
 
 // Manejador de mensajes de Telegram
