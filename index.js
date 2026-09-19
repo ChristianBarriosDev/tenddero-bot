@@ -19,8 +19,8 @@ app.get('/', (req, res) => {
     res.send('Servidor de Tenddero operando al 100% y conectado con Supabase!');
 });
 
-// Forzar el puerto dinámico de Railway de manera directa
-const PORT = Number(process.env.PORT) || 3000;
+// Única salida de puerto limpia y compatible con Railway
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Servidor corriendo exitosamente en el puerto ${PORT}`);
 });
@@ -75,9 +75,4 @@ bot.on('message', async (msg) => {
     console.error(err);
     bot.sendMessage(chatId, `¡Hola, ${username}! Recibí tu mensaje: "${text}".`);
   }
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo exitosamente en el puerto ${PORT}`);
 });
