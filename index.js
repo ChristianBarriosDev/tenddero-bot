@@ -19,8 +19,8 @@ app.get('/', (req, res) => {
     res.send('Servidor de Tenddero operando al 100% y conectado con Supabase!');
 });
 
-// Usar estrictamente el puerto que provee Railway
-const PORT = process.env.PORT || 8080;
+// Forzar el puerto dinámico de Railway de manera directa
+const PORT = Number(process.env.PORT) || 3000;
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Servidor corriendo exitosamente en el puerto ${PORT}`);
 });
