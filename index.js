@@ -19,9 +19,9 @@ app.get('/', (req, res) => {
     res.send('Servidor de Tenddero operando al 100% y conectado con Supabase!');
 });
 
-// Usar el puerto que asigna Railway o el 8080 por defecto localmente
+// Usar estrictamente el puerto que provee Railway
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Servidor corriendo exitosamente en el puerto ${PORT}`);
 });
 
