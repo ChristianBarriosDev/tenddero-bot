@@ -5,12 +5,12 @@ const TelegramBot = require('node-telegram-bot-api');
 const app = express();
 app.use(express.json());
 
-// Conexión segura con Supabase usando las variables de entorno de Railway
+// Conexión segura con Supabase usando las variables de entorno
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Inicializar el bot de Telegram
+// Inicializar el bot de Telegram con polling
 const token = process.env.TELEGRAM_BOT_TOKEN;
 const bot = new TelegramBot(token, { polling: true });
 
@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
 });
 
 // Usar estrictamente el puerto dinámico que asigna Railway
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Servidor corriendo exitosamente en el puerto ${PORT}`);
 });
@@ -46,14 +46,14 @@ bot.on('message', async (msg) => {
         return bot.sendMessage(chatId, '📭 Aún no hay registros guardados en Supabase.');
       }
 
-      let respuesta = '📋 **Últimos registros en Supabase:**\n\n';
+      let respuesta = '📋 *Últimos registros en Supabase:*\n\n';
       data.forEach((item, index) => {
         respuesta += `${index + 1}. *${item.usuario}*: "${item.mensaje}"\n`;
       });
 
       bot.sendMessage(chatId, respuesta, { parse_mode: 'Markdown' });
     } catch (err) {
-      console.error(err);
+      console.error('Error detallado en /listar:', err.message);
       bot.sendMessage(chatId, '❌ Error al consultar la base de datos.');
     }
     return;
@@ -67,12 +67,12 @@ bot.on('message', async (msg) => {
 
     if (error) {
       console.error('Error al guardar en Supabase:', error);
-      bot.sendMessage(chatId, `¡Hola, ${username}! Recibí tu mensaje, pero hubo un error al guardarlo en la BD.`);
+      bot.sendMessage(chatId, `¡Hola, ${username}! Recibí tu mensaje, pero hubo un error al guardarlo.`);
     } else {
-      bot.sendMessage(chatId, `✅ ¡Mensaje guardado con éxito en Supabase, ${username}!: "${text}"`);
+      bot.sendMessage(chatId, `✅ ¡Mensaje guardado con éxito, ${username}!: "${text}"`);
     }
   } catch (err) {
-    console.error(err);
+    console.error('Error general al insertar:', err);
     bot.sendMessage(chatId, `¡Hola, ${username}! Recibí tu mensaje: "${text}".`);
   }
 });
